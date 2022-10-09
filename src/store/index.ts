@@ -9,6 +9,7 @@ interface WeatherStoreState {
   loading: boolean;
   error: string;
   getWeather: (city: string, country: string) => void;
+  clearWeather: () => void;
   setLoading: () => void;
   setError: (err: string) => void;
 }
@@ -43,6 +44,13 @@ const useWeatherStore = create<WeatherStoreState>((set, get) => ({
     } catch (err) {
       get().setError((err as DOMException).message);
     }
+  },
+  clearWeather: () => {
+    set(() => ({
+      data: null,
+      loading: false,
+      error: "",
+    }));
   },
   setLoading: () =>
     set(() => ({

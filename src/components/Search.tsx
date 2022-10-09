@@ -1,14 +1,19 @@
 import { useState, FC, FormEvent } from "react";
 import { useWeatherStore } from "../store";
+import shallow from "zustand/shallow";
 
-interface SearchProps {
-  title: string;
-}
-
-const Search: FC<SearchProps> = ({ title }) => {
+const Search: FC = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const { getWeather, setLoading } = useWeatherStore();
+  const { getWeather, setLoading, setError, clearWeather } = useWeatherStore(
+    (state) => ({
+      getWeather: state.getWeather,
+      setLoading: state.setLoading,
+      setError: state.setError,
+      clearWeather: state.clearWeather,
+    }),
+    shallow
+  );
 
   const cityOnChange = (e: FormEvent<HTMLInputElement>) => {
     setCity(e.currentTarget.value);
@@ -20,7 +25,9 @@ const Search: FC<SearchProps> = ({ title }) => {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (city.trim() === "") {
+    if (city.trim() === "" && country.trim() === "") {
+      setError("Please insert City and/or Country Code");
+      return;
     }
     setLoading();
     getWeather(city, country);
@@ -29,11 +36,12 @@ const Search: FC<SearchProps> = ({ title }) => {
   const clearHandler = () => {
     setCity("");
     setCountry("");
+    clearWeather();
   };
 
   return (
-    <div className="w-full py-3 divide-y divide-black-300">
-      <h1 className="text-2xl pb-3 font-bold">{title}</h1>
+    <div className="w-full py-3 divide-y divide-gray-300">
+      <h1 className="text-2xl pb-3 font-bold">Today's Weather</h1>
       <form
         className="py-3 flex align-items-center gap-2 justify-between flex-col md:flex-row"
         onSubmit={submitHandler}
@@ -45,7 +53,7 @@ const Search: FC<SearchProps> = ({ title }) => {
           <input
             name="city"
             type="text"
-            className="border ml-2 p-1 flex-1"
+            className=" ml-2 p-2 flex-1 bg-gray-700 border-none focus:outline-none"
             placeholder="City Name"
             value={city}
             onChange={cityOnChange}
@@ -58,16 +66,23 @@ const Search: FC<SearchProps> = ({ title }) => {
           <input
             name="country"
             type="text"
-            className="border ml-2 p-1 flex-1"
+            className=" ml-2 p-2 flex-1 bg-gray-700 border-none focus:outline-none"
             placeholder="Country Code"
             value={country}
             onChange={countryOnChange}
           />
         </div>
-        <button className="border flex-1" type="submit">
+        <button
+          className="min-h-[40px]  flex-1 bg-indigo-600 hover:bg-indigo-700 "
+          type="submit"
+        >
           Search
         </button>
-        <button className="border flex-1" type="button" onClick={clearHandler}>
+        <button
+          className="min-h-[40px]  flex-1 bg-rose-600 hover:bg-rose-700 "
+          type="button"
+          onClick={clearHandler}
+        >
           Clear
         </button>
       </form>
