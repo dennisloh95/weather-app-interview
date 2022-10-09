@@ -26,10 +26,12 @@ const Search: FC = () => {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (city.trim() === "" && country.trim() === "") {
       setError("Please insert City and/or Country Code");
       return;
     }
+
     setLoading();
     getWeather(city, country);
   };

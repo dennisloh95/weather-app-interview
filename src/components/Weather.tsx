@@ -6,16 +6,24 @@ interface WeatherProps {
   data: WeatherData;
 }
 
-const Weather: FC<WeatherProps> = ({ data }) => {
+const Weather: FC<WeatherProps> = ({
+  data: {
+    main: { temp_max, temp_min, humidity },
+    name,
+    dt,
+    sys: { country },
+    weather: [{ main, description, icon }],
+  },
+}) => {
   return (
     <div className="">
       <p className="text-gray-200">
-        {data.name}, {data.sys.country}
+        {name}, {country}
       </p>
       <div className="flex">
-        <p className="text-6xl font-bold py-3">{data.weather[0].main}</p>
+        <p className="text-6xl font-bold py-3">{main}</p>
         <img
-          src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`}
+          src={`http://openweathermap.org/img/wn/${icon}@2x.png`}
           alt="weather icon"
           className="w-12 h-12"
         />
@@ -23,19 +31,19 @@ const Weather: FC<WeatherProps> = ({ data }) => {
       <div>
         <div className="flex">
           <p className="text-gray-200 w-36 capitalize">Description: </p>
-          <p className="capitalize">{data.weather[0].description}</p>
+          <p className="capitalize">{description}</p>
         </div>
         <div className="flex">
           <p className="text-gray-200 w-36">Temperature: </p>
-          <p>{`${data.main.temp_min}°C ~ ${data.main.temp_min}°C`} </p>
+          <p>{`${temp_min}°C ~ ${temp_max}°C`} </p>
         </div>
         <div className="flex">
           <p className="text-gray-200 w-36">Humidity: </p>
-          <p>{data.main.humidity}%</p>
+          <p>{humidity}%</p>
         </div>
         <div className="flex">
           <p className="text-gray-200 w-36">Time: </p>
-          <p>{dayjs.unix(data.dt).format("YYYY-MM-DD hh:mm A")}</p>
+          <p>{dayjs.unix(dt).format("YYYY-MM-DD hh:mm A")}</p>
         </div>
       </div>
     </div>
