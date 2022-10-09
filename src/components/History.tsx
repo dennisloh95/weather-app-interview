@@ -24,33 +24,33 @@ const HistoryList: FC = () => {
             No Record
           </div>
         ) : (
-          history.map((item, index) => (
-            <div
-              key={item.id}
-              className="flex justify-between items-center py-2"
-            >
-              <div className="flex justify-between flex-1">
-                <p>
-                  {index + 1} {item.city}, {item.country}
-                </p>
-                <p className="hidden sm:inline">{item.date}</p>
+          history.map((item, index) => {
+            const { id, city, country, date } = item;
+            return (
+              <div key={id} className="flex justify-between items-center py-2">
+                <div className="flex justify-between flex-1">
+                  <p>
+                    {index + 1} {city}, {country}
+                  </p>
+                  <p className="hidden sm:inline">{date}</p>
+                </div>
+                <div className="flex gap-3 ml-3">
+                  <button
+                    className="rounded p-3 bg-gray-700 hover:bg-gray-900"
+                    onClick={getWeather.bind(this, city, country)}
+                  >
+                    <FiSearch />
+                  </button>
+                  <button
+                    className="rounded p-3 bg-gray-700 hover:bg-gray-900"
+                    onClick={removeHistory.bind(this, id)}
+                  >
+                    <FiTrash2 />
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-3 ml-3">
-                <button
-                  className="rounded p-3 bg-gray-700 hover:bg-gray-900"
-                  onClick={getWeather.bind(this, item.city, item.country)}
-                >
-                  <FiSearch />
-                </button>
-                <button
-                  className="rounded p-3 bg-gray-700 hover:bg-gray-900"
-                  onClick={removeHistory.bind(this, item.id)}
-                >
-                  <FiTrash2 />
-                </button>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
