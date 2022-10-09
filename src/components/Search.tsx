@@ -1,10 +1,11 @@
-import { useState, FC, FormEvent } from "react";
+import { useState, FC, FormEvent, memo } from "react";
 import { useWeatherStore } from "../store";
 import shallow from "zustand/shallow";
 
 const Search: FC = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  // Selected necessary states only from useWeatherStore.
   const { getWeather, setLoading, setError, clearWeather } = useWeatherStore(
     (state) => ({
       getWeather: state.getWeather,
@@ -90,4 +91,5 @@ const Search: FC = () => {
   );
 };
 
-export default Search;
+// Using memo here to prevent child component rerender when parent states change.
+export default memo(Search);

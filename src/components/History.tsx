@@ -1,10 +1,19 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { FiSearch, FiTrash2 } from "react-icons/fi";
 import { useHistorySearchStore, useWeatherStore } from "../store";
+import shallow from "zustand/shallow";
 
 const HistoryList: FC = () => {
-  const { removeHistory, history } = useHistorySearchStore();
-  const { getWeather } = useWeatherStore();
+  // Selected necessary states only from useHistorySearchStore.
+  const { removeHistory, history } = useHistorySearchStore(
+    (state) => ({
+      removeHistory: state.removeHistory,
+      history: state.history,
+    }),
+    shallow
+  );
+  // Selected necessary states only from useWeatherStore.
+  const getWeather = useWeatherStore((state) => state.getWeather);
 
   return (
     <div className="my-5 divide-y divide-gray-300">
@@ -21,9 +30,9 @@ const HistoryList: FC = () => {
               className="flex justify-between items-center py-2"
             >
               <div className="flex justify-between flex-1">
-                <h1>
+                <p>
                   {index + 1} {item.city}, {item.country}
-                </h1>
+                </p>
                 <p className="hidden sm:inline">{item.date}</p>
               </div>
               <div className="flex gap-3 ml-3">
@@ -48,4 +57,5 @@ const HistoryList: FC = () => {
   );
 };
 
-export default HistoryList;
+// Using memo here to prevent child component rerender when parent states change.
+export default memo(HistoryList);

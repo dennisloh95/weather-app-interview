@@ -1,10 +1,4 @@
-export interface Weather {
-  description: string;
-  icon: string;
-  id: number;
-  main: string;
-}
-
+// define api response types, reference: https://openweathermap.org/current
 export interface WeatherData {
   coord: {
     lon: number;
@@ -55,17 +49,20 @@ export interface WeatherData {
   cod: number;
 }
 
+// define api response error types,
 export interface WeatherError {
   cod: string;
   message: string;
 }
 
+// define api fetch state types,
 export interface WeatherState {
   data: WeatherData | null;
   loading: boolean;
   error: string;
 }
 
+// define history data types,
 export interface History {
   id: string;
   city: string;

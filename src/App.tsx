@@ -6,6 +6,7 @@ import History from "./components/History";
 import shallow from "zustand/shallow";
 
 const App: FC = () => {
+  // selected necessary states only from useWeatherStore.
   const { data, loading, error } = useWeatherStore(
     (state) => ({
       data: state.data,
@@ -16,7 +17,7 @@ const App: FC = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 min-h-screen text-gray-100">
+    <div className="container mx-auto px-4 min-h-screen text-white">
       <Search />
       <div className="min-h-[250px] flex items-center">
         {loading ? (

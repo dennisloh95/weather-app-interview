@@ -4,6 +4,12 @@ import { History, WeatherData, WeatherError } from "../types";
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 
+// Using a small state management library: zustand to manage global state. Reference:https://github.com/pmndrs/zustand
+// Make use of zustand persist to manage localstorage for history.
+// Using uuid for history unique id.
+// Using daysjs for date/time manipulation.
+
+// Define WeatherStoreHook types
 interface WeatherStoreState {
   data: WeatherData | null;
   loading: boolean;
@@ -14,6 +20,7 @@ interface WeatherStoreState {
   setError: (err: string) => void;
 }
 
+// Define useWeatherStore hook structure to manage weather fetching status.
 const useWeatherStore = create<WeatherStoreState>((set, get) => ({
   data: null,
   loading: false,
@@ -64,12 +71,14 @@ const useWeatherStore = create<WeatherStoreState>((set, get) => ({
     })),
 }));
 
+// Define HistoryStoreHook types
 interface HistoryStoreState {
   history: History[];
   addHistory: (history: History) => void;
   removeHistory: (id: string) => void;
 }
 
+// Define useHistorySearchStore hook structure to manage history state, using persist here as I think it can improve this way like google search history behaviour.
 const useHistorySearchStore = create<HistoryStoreState>()(
   persist(
     (set) => ({
